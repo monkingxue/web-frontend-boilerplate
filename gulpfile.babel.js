@@ -2,6 +2,7 @@ import gulp from "gulp";
 import gutil from "gulp-util";
 import del from "del";
 import less from 'gulp-less';
+import minCss from 'gulp-clean-css';
 import autoprefixer from 'gulp-autoprefixer';
 import cached from 'gulp-cached';
 
@@ -10,7 +11,7 @@ import webpackConfig from "./webpack.config.js";
 
 import connect from 'gulp-connect';
 import rest from 'connect-rest';
-import mocks from './mocks';
+// import mocks from './mocks';
 
 const src = {
   html: "src/html/*.html",
@@ -19,7 +20,7 @@ const src = {
   assets: "assets/**/*"
 };
 
-var dist = {
+const dist = {
   root: "dist/",
   html: "dist/",
   style: "dist/style",
@@ -27,7 +28,7 @@ var dist = {
   assets: "dist/assets"
 };
 
-var bin = {
+const bin = {
   root: "bin/",
   html: "bin/",
   style: "bin/style",
@@ -97,6 +98,7 @@ let style = () =>
     .pipe(autoprefixer({
       browsers: ['last 3 version']
     }))
+    .pipe(minCss())
     .pipe(gulp.dest(dist.style));
 
 
@@ -155,7 +157,7 @@ let webpackDevelopment = (done) => {
 let connectServer = (done) => {
   connect.server({
     root: dist.root,
-    port: 8080,
+    port: 5000,
     livereload: true,
     middleware: (connect, opt) => {
       return [rest.rester({
@@ -163,7 +165,7 @@ let connectServer = (done) => {
       })]
     }
   });
-  mocks(rest);
+  // mocks(rest);
   done();
 };
 
@@ -175,7 +177,7 @@ let watch = () => {
   gulp.watch(src.html, html);
   gulp.watch("src/**/*.js", webpackDevelopment);
   gulp.watch("src/**/*.less", style);
-  gulp.watch("dist/**/*").on('change', (file) => {
+  gulp.watch("dist/**/*").on('change', () => {
     gulp.src('dist/')
       .pipe(connect.reload());
   });
@@ -217,12 +219,4 @@ let handleError = (err) => {
     console.log(err)
   }
   this.emit('end')
-};
-
-/**
- * [reload description]
- * @return {[type]} [description]
- */
-let reload = () => {
-  connect.reload();
 };
