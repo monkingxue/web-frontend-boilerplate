@@ -1,33 +1,28 @@
 import webpack from "webpack";
-import glob from 'glob';
+import glob from "glob";
 const config = {
   entry: {
-    vendor: ['react', 'react-dom']
+    vendor: ["react", "react-dom"]
   },
   output: {
-    path: __dirname + '/dist/js/',
-    filename: '[name].js'
+    path: __dirname + "/dist/js/",
+    filename: "[name].js"
   },
   module: {
     loaders: [{
       test: /\.js$/,
       exclude: /node_modules/,
-      loader: 'babel',
+      loader: "babel",
       query: {
-        presets: ['es2015', 'react']
+        presets: ["es2015", "react"]
       }
-    }],
-    preLoaders:[{
-      test: /\.js$/,
-      loader: "eslint-loader",
-      exclude: /node_modules/
     }],
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js')
+    new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js")
   ],
   eslint: {
-    configFile: './.eslintrc'
+    configFile: "./.eslintrc"
   }
 };
 /**
