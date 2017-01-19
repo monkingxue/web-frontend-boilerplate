@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import {Provider} from "mobx-react";
 
-class App extends Component {
-  render() {
-    return (
+import Store from "../store/main";
+import App from "./app";
+
+ReactDOM.render((
+    <Provider Store={Store}>
       <div>
-        okok
+        <App/>
       </div>
-    )
-  }
-}
-
-ReactDOM.render(<App/>, document.getElementById('content'));
+    </Provider>),
+  document.getElementById("content"));

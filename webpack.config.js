@@ -1,5 +1,6 @@
 import webpack from "webpack";
 import glob from "glob";
+
 const config = {
   entry: {
     vendor: ["react", "react-dom"]
@@ -14,7 +15,8 @@ const config = {
       exclude: /node_modules/,
       loader: "babel",
       query: {
-        presets: ["es2015", "react"]
+        presets: ["es2015", "react", "stage-0"],
+        plugins: ["transform-decorators-legacy", "transform-async-to-generator"]
       }
     }],
   },
@@ -28,7 +30,7 @@ const config = {
 /**
  * find entries
  */
-let files = glob.sync('./src/js/*/index.js');
+let files = glob.sync("./src/js/*/index.js");
 let newEntries = files.reduce((memo, file) => {
   let name = /.*\/(.*?)\/index\.js/.exec(file)[1];
   memo[name] = entry(name);
@@ -41,6 +43,7 @@ config.entry = Object.assign({}, config.entry, newEntries);
  * @return {[type]}      [description]
  */
 function entry(name) {
-  return './src/js/' + name + '/index.js';
+  return "./src/js/" + name + "/index.js";
 }
+
 module.exports = config;
